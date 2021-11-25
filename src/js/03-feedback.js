@@ -12,7 +12,7 @@ populateForm();
 function onFormSubmit(event) {
     event.preventDefault();
 
-    console.log('відправляєм форму');
+    console.log('form submit');
     event.currentTarget.reset();
     localStorage.removeItem(STORAGE_KEY);
 }
