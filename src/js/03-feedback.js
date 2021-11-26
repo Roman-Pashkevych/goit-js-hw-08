@@ -10,9 +10,10 @@ form.addEventListener('submit', onFormSubmit);
 form.addEventListener('input', throttle(onFormInput, 500));
 
 populateForm();
-
+validate_form();
 function onFormSubmit(event) {
     event.preventDefault();
+    
     const formEl = event.currentTarget.elements;
     const email = formEl.email.value;
     const message = formEl.message.value;
@@ -20,25 +21,13 @@ function onFormSubmit(event) {
         email,
         message,
     };
-/* try {
-    console.log(localStorage.getItem(FORM_FIELDS_KEY));
-      
-    event.currentTarget.reset();
-    localStorage.removeItem(STORAGE_KEY);
-} catch (error) {
-    return alert('всі поля повинні бути заповнені!')
-} */
-    console.log(formData);
+    
     event.currentTarget.reset();
     localStorage.removeItem(STORAGE_KEY);
 }
 
 function onFormInput(event) {
     feedbackFormData[event.target.name] = event.target.value;
-   /*  const userData = {
-        userMail: email.value,
-        userMessage: message.value,
-    }; */
     console.log(feedbackFormData);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(feedbackFormData));
 }
@@ -46,7 +35,7 @@ function onFormInput(event) {
 function populateForm() {
     const saveFormData = localStorage.getItem(STORAGE_KEY);
     const saveFormDataPars = JSON.parse(saveFormData);
-     console.log(saveFormDataPars);
+     
     
     if (saveFormDataPars) {
     input.value = saveFormDataPars.email;
@@ -55,4 +44,23 @@ function populateForm() {
     feedbackFormData.email = saveFormDataPars.email;
         
 };
+}
+
+function validate_form ()
+{
+	valid = true;
+
+        if ( feedbackFormData.message === "" )
+        {
+                alert ( "Пожалуйста, введите данные в поле 'message'." );
+                valid = false;
+        }
+
+        if ( feedbackFormData.email === "" )
+        {
+                alert ( "Пожалуйста, введите данные в поле 'email'." );
+                valid = false;
+        }
+
+        return valid;
 }
