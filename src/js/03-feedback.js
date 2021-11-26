@@ -1,6 +1,6 @@
-import throttle from "lodash.throttle";
+import throttle from 'lodash.throttle';
 
-const STORAGE_KEY = "feedback-form-state";
+/* const STORAGE_KEY = "feedback-form-state";
 const form = document.querySelector('.feedback-form');
 const input = document.querySelector('input');
 const textarea = document.querySelector('textarea');
@@ -10,7 +10,7 @@ form.addEventListener('submit', onFormSubmit);
 form.addEventListener('input', throttle(onFormInput, 500));
 
 populateForm();
-validate_form();
+
 function onFormSubmit(event) {
     event.preventDefault();
     
@@ -44,23 +44,44 @@ function populateForm() {
     feedbackFormData.email = saveFormDataPars.email;
         
 };
-}
+} */
 
-function validate_form ()
-{
-	valid = true;
+const storage_Key = 'feedback-form-state';
 
-        if ( feedbackFormData.message === "" )
-        {
-                alert ( "Пожалуйста, введите данные в поле 'message'." );
-                valid = false;
-        }
+const formRef = document.querySelector('form');
+const email = formRef.elements.email;
+const message = formRef.elements.message;
 
-        if ( feedbackFormData.email === "" )
-        {
-                alert ( "Пожалуйста, введите данные в поле 'email'." );
-                valid = false;
-        }
+const onInput = e => {
+  const formData = {
+    mail: email.value,
+    message: message.value,
+  };
+    localStorage.setItem(storage_Key, JSON.stringify(formData));
+};
+const getFromLS = () => {
+  const parsedData = JSON.parse(localStorage.getItem(storage_Key));
 
-        return valid;
-}
+  if (!parsedData) return;
+
+  email.value = parsedData.mail;
+  message.value = parsedData.message;
+};
+getFromLS();
+
+const onSubmit = e => {
+  e.preventDefault();
+
+  if (!email.value || !message.value) {
+    return alert('All feels must be fell out!');
+  }
+
+  console.log({ email: email.value, message: message.value });
+
+  formRef.reset();
+  localStorage.removeItem(storage_Key);
+};
+
+formRef.addEventListener('input', throttle(onInput, 500));
+
+formRef.addEventListener('submit', onSubmit);
